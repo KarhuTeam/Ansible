@@ -18,7 +18,7 @@ func init() {
 	if playbookTemplate, err = template.New(playbookFilename).Parse(`---
 
 - hosts: {{ .Hosts }}
-  sudo: {{ .Sudo }}
+  become: {{ .Become }}
   {{ if len .Vars }}vars:{{ range $key, $value := .Vars}}
     {{ $key }}: {{ $value }}{{ end }}
   {{ end }}
@@ -31,10 +31,10 @@ func init() {
 
 // Playbook definition
 type Playbook struct {
-	Hosts string
-	Sudo  string
-	Roles Roles
-	Vars  PlaybookVars
+	Hosts  string
+	Become string
+	Roles  Roles
+	Vars   PlaybookVars
 }
 
 type PlaybookVars map[string]interface{}
@@ -53,10 +53,10 @@ var playbookSubDirs = []string{rolesDir}
 func NewPlaybook(roles ...*Role) *Playbook {
 
 	return &Playbook{
-		Hosts: "all",
-		Sudo:  "yes",
-		Roles: roles,
-		Vars:  make(PlaybookVars),
+		Hosts:  "all",
+		Become: "yes",
+		Roles:  roles,
+		Vars:   make(PlaybookVars),
 	}
 }
 
